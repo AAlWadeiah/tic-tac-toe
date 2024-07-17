@@ -3,3 +3,39 @@
     margin: 0;
     padding: 0;
 }
+
+body{
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    display: grid;
+    grid-template-columns: 1fr;
+    justify-items: center;
+}
+
+header > h1 {
+    font-size: 40px;
+    padding: 16px;
+}
+
+.game-board {
+    margin-top: 24px;
+    width: 50vw;
+    height: 70vh;
+    display: grid;
+    grid-template: 1fr 1fr 1fr / 1fr 1fr 1fr;
+}
+
+.cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mid-row {
+    border-top: 2px black solid;
+    border-bottom: 2px black solid;
+}
+
+.mid-col {
+    border-left: 2px black solid;
+    border-right: 2px black solid;
+}
