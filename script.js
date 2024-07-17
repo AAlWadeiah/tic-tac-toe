@@ -79,11 +79,22 @@ function GameController(
     return false;
   };
 
-  const gameOver = () => {
-    activePlayer.increaseScore();
-    console.log(
-      `Winner is ${activePlayer.getName()} with a score of ${activePlayer.getScore()}!! `
-    );
+  const checkTie = () => {
+    if (board.getBoard().some((cells) => cells === "-")) {
+      return false;
+    }
+    return true;
+  };
+
+  const gameOver = (player = null) => {
+    if (player) {
+      activePlayer.increaseScore();
+      console.log(
+        `Winner is ${activePlayer.getName()} with a score of ${activePlayer.getScore()}!! `
+      );
+    } else {
+      console.log("Its a tie :(");
+    }
     board.clearBoard();
   };
 
@@ -99,7 +110,13 @@ function GameController(
 
       let won = checkWinner(activePlayer);
 
-      if (won) gameOver();
+      if (won) {
+        board.printBoard();
+        gameOver(activePlayer);
+      } else if (checkTie()) {
+        board.printBoard();
+        gameOver();
+      }
 
       switchActivePlayer();
       printNewRound();
@@ -118,9 +135,21 @@ function GameController(
 
 const game = GameController("Bob", "Joe");
 
+// Game with X as winner
 game.playRound(0);
 game.playRound(3);
 game.playRound(3);
 game.playRound(4);
 game.playRound(6);
+game.playRound(8);
+
+// Game with a tie
+game.playRound(0);
+game.playRound(3);
+game.playRound(4);
+game.playRound(6);
+game.playRound(7);
+game.playRound(2);
+game.playRound(5);
+game.playRound(1);
 game.playRound(8);
