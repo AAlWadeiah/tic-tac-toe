@@ -45,18 +45,6 @@ function createPlayer(name, mark) {
   return { getName, getMark, getScore, increaseScore };
 }
 
-function openModal(modal) {
-  if (modal == null) return;
-  modal.classList.add("active");
-  overlay.classList.add("active");
-}
-
-function closeModal(modal) {
-  if (modal == null) return;
-  modal.classList.remove("active");
-  overlay.classList.remove("active");
-}
-
 function GameController(
   playerOneName = "Player One",
   playerTwoName = "Player Two"
@@ -111,29 +99,12 @@ function GameController(
     return true;
   };
 
-  const gameOverMessages = (title, scoreMsg) => {
-    const modalTitle = document.querySelector(
-      "#game-over-modal > .modal-header > .title"
-    );
-    modalTitle.innerText = title;
-    const modalScoreMsg = document.querySelector(
-      "#game-over-modal > .modal-body > .score"
-    );
-    modalScoreMsg.innerText = scoreMsg;
-  };
-
   const gameOver = (player = null) => {
-    const gameOverModal = document.querySelector("#game-over-modal");
-
     if (player) {
       activePlayer.increaseScore();
-      gameOverMessages(
+      DisplayController.drawGameOver(
         `${activePlayer.getName()} Won!!`,
         `They have a score of ${activePlayer.getScore()}`
-      );
-      openModal(gameOverModal);
-      console.log(
-        `Winner is ${activePlayer.getName()} with a score of ${activePlayer.getScore()}!! `
       );
 
       DisplayController.drawScore(
@@ -143,16 +114,14 @@ function GameController(
         players[1].getScore()
       );
     } else {
-      gameOverMessages("It's a tie ...", "None one scores :(");
-      openModal(gameOverModal);
-      console.log("Its a tie :(");
+      DisplayController.drawGameOver("It's a tie ...", "No one scores :(");
     }
-    board.clearBoard();
   };
 
-  const printNewRound = () => {
-    board.printBoard();
-    console.log(`${activePlayer.getName()}'s turn`);
+  const printNewRound = (isGameOver = false) => {
+    if (isGameOver) {
+      board.clearBoard();
+    }
     DisplayController.drawBoard(GameBoard.getBoard());
     DisplayController.drawTurn(activePlayer.getName());
     DisplayController.drawScore(
@@ -168,13 +137,9 @@ function GameController(
     if (board.getBoard()[spot] === "-") {
       board.addMark(spot, mark);
 
-      let won = checkWinner(activePlayer);
-
-      if (won) {
-        board.printBoard();
+      if (checkWinner(activePlayer)) {
         gameOver(activePlayer);
       } else if (checkTie()) {
-        board.printBoard();
         gameOver();
       }
 
@@ -193,11 +158,12 @@ function GameController(
   };
 }
 
-const DisplayController = (function (ticTacToeBoard) {
-  let visualBoard = ticTacToeBoard;
+const DisplayController = (function (visualBoard) {
   const playerOneScoreCard = document.querySelector(".player1-score");
   const playerTwoScoreCard = document.querySelector(".player2-score");
   const turnCard = document.querySelector(".turn-card");
+  const gameOverModal = document.querySelector("#game-over-modal");
+  const continueBtn = document.querySelector("#continue-btn");
 
   const drawBoard = (boardArr) => {
     // generate cells and populate them based on values in GameBoard.getBoard()
@@ -232,10 +198,43 @@ const DisplayController = (function (ticTacToeBoard) {
   const drawTurn = (activePlayerName) => {
     turnCard.innerText = `${activePlayerName}'s turn`;
   };
+
+  function openModal(modal) {
+    if (modal == null) return;
+    modal.classList.add("active");
+    overlay.classList.add("active");
+  }
+
+  function closeModal(modal) {
+    if (modal == null) return;
+    modal.classList.remove("active");
+    overlay.classList.remove("active");
+  }
+
+  const drawGameOver = (title, scoreMsg) => {
+    const modalTitle = document.querySelector(
+      "#game-over-modal > .modal-header > .title"
+    );
+    modalTitle.innerText = title;
+    const modalScoreMsg = document.querySelector(
+      "#game-over-modal > .modal-body > .score"
+    );
+    modalScoreMsg.innerText = scoreMsg;
+
+    openModal(gameOverModal);
+
+    continueBtn.addEventListener("click", (e) => {
+      closeModal(gameOverModal);
+      GameBoard.clearBoard();
+      drawBoard(GameBoard.getBoard());
+    });
+  };
+
   return {
     drawBoard,
     drawTurn,
     drawScore,
+    drawGameOver,
   };
 })(ticTacToeBoard);
 
