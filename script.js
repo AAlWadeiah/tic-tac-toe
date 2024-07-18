@@ -67,11 +67,9 @@ function GameController(
 
   const switchActivePlayer = () =>
     (activePlayer = activePlayer === players[0] ? players[1] : players[0]);
-  // Convert all '+' to the player's mark
 
   const checkWinner = (player) => {
     // loop through winning combos
-    // while there are still three '+' in the current combo that we have not found:
     // check if the player's mark is at the same index as the '+'
     // if all three '+' match with the marks, then return true
     let mark = player.getMark();
@@ -87,11 +85,6 @@ function GameController(
         if (winMarkCounter == 3) return true;
       }
     }
-    // for (const pair of Object.entries(WinningCombos)) {
-    //   if (pair[1].toString() === t.toString()) {
-    //     return true;
-    //   }
-    // }
     return false;
   };
 
@@ -163,11 +156,6 @@ function GameController(
   };
 }
 
-// For UI:
-// Need to take names of players. Could do that with a modal
-// Need show who's turn it is on the screen
-// Need to show the current score
-
 const DisplayController = (function (ticTacToeBoard) {
   let visualBoard = ticTacToeBoard;
   const playerOneScoreCard = document.querySelector(".player1-score");
@@ -177,7 +165,6 @@ const DisplayController = (function (ticTacToeBoard) {
   const drawBoard = (boardArr) => {
     // generate cells and populate them based on values in GameBoard.getBoard()
     visualBoard.innerHTML = "";
-    // let currBoard = GameBoard.getBoard();
 
     for (let i = 0; i < BOARD_SIZE; i++) {
       let newCell = document.createElement("div");
@@ -220,31 +207,3 @@ const game = GameController("Bob", "Joe");
 ticTacToeBoard.addEventListener("click", (e) => {
   game.playRound(e.target.dataset.index);
 });
-
-// DisplayController.drawBoard();
-
-// Game with player 1 as winner
-// game.playRound(0);
-// game.playRound(3);
-// game.playRound(3);
-// game.playRound(4);
-// game.playRound(6);
-// game.playRound(8);
-
-// Game with a tie
-// game.playRound(0);
-// game.playRound(3);
-// game.playRound(4);
-// game.playRound(6);
-// game.playRound(7);
-// game.playRound(2);
-// game.playRound(5);
-// game.playRound(1);
-// game.playRound(8);
-
-// Game with player 1 as winner
-// game.playRound(0);
-// game.playRound(3);
-// game.playRound(4);
-// game.playRound(6);
-// game.playRound(8);
