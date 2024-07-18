@@ -202,8 +202,23 @@ const DisplayController = (function (ticTacToeBoard) {
   };
 })(ticTacToeBoard);
 
-const game = GameController("Bob", "Joe");
+const gameForm = document.querySelector("#start-game-form");
 
-ticTacToeBoard.addEventListener("click", (e) => {
-  game.playRound(e.target.dataset.index);
+gameForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const p1Name = document.querySelector("#p1-name");
+  const p2Name = document.querySelector("#p2-name");
+
+  const game = GameController(p1Name.value, p2Name.value);
+
+  const init = document.querySelector("#game-init");
+  init.style.display = "none";
+
+  const gameWidgets = document.querySelector("#game-widgets");
+  gameWidgets.style.display = "block";
+
+  ticTacToeBoard.addEventListener("click", (e) => {
+    game.playRound(e.target.dataset.index);
+  });
 });
