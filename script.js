@@ -67,17 +67,31 @@ function GameController(
 
   const switchActivePlayer = () =>
     (activePlayer = activePlayer === players[0] ? players[1] : players[0]);
+  // Convert all '+' to the player's mark
 
   const checkWinner = (player) => {
+    // loop through winning combos
+    // while there are still three '+' in the current combo that we have not found:
+    // check if the player's mark is at the same index as the '+'
+    // if all three '+' match with the marks, then return true
     let mark = player.getMark();
     let t = board.getBoard().map((curr, i) => {
       return curr === mark ? "+" : "-";
     });
+
     for (const pair of Object.entries(WinningCombos)) {
-      if (pair[1].toString() === t.toString()) {
-        return true;
+      let winMarkCounter = 0;
+      let combo = pair[1];
+      for (let i = 0; i < combo.length; i++) {
+        if (t[i] === "+" && t[i] === combo[i]) winMarkCounter++;
+        if (winMarkCounter == 3) return true;
       }
     }
+    // for (const pair of Object.entries(WinningCombos)) {
+    //   if (pair[1].toString() === t.toString()) {
+    //     return true;
+    //   }
+    // }
     return false;
   };
 
