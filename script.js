@@ -1,5 +1,9 @@
+// Constants
 const BOARD_SIZE = 3 * 3;
+
+// DOM elements at the top to make sure they are initialized before being used in code
 const ticTacToeBoard = document.querySelector(".game-board");
+const gameForm = document.querySelector("#start-game-form");
 
 // Gameboard module
 const GameBoard = (function () {
@@ -201,8 +205,6 @@ const DisplayController = (function (ticTacToeBoard) {
     drawScore,
   };
 })(ticTacToeBoard);
-
-const gameForm = document.querySelector("#start-game-form");
 
 gameForm.addEventListener("submit", (e) => {
   e.preventDefault();

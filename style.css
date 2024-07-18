@@ -55,6 +55,11 @@ header > h1 {
     margin: 8px;
 }
 
+p.form-control {
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+
 .form-control > input[type=text] {
     margin-left: 4px;
     padding: 4px;
