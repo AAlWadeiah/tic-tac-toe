@@ -1,7 +1,8 @@
+const BOARD_SIZE = 3 * 3;
+
 // Gameboard module
 const GameBoard = (function () {
-  const size = 3 * 3;
-  let board = new Array(size).fill("-");
+  let board = new Array(BOARD_SIZE).fill("-");
 
   const getBoard = () => board;
 
@@ -12,7 +13,7 @@ const GameBoard = (function () {
   };
 
   const clearBoard = () => {
-    board = new Array(size).fill("-");
+    board = new Array(BOARD_SIZE).fill("-");
     return board;
   };
 
@@ -92,6 +93,12 @@ function GameController(
       console.log(
         `Winner is ${activePlayer.getName()} with a score of ${activePlayer.getScore()}!! `
       );
+      DisplayController.drawScore(
+        players[0].getName(),
+        players[0].getScore(),
+        players[1].getName(),
+        players[1].getScore()
+      );
     } else {
       console.log("Its a tie :(");
     }
@@ -101,6 +108,14 @@ function GameController(
   const printNewRound = () => {
     board.printBoard();
     console.log(`${activePlayer.getName()}'s turn`);
+    DisplayController.drawBoard(GameBoard.getBoard());
+    DisplayController.drawTurn(activePlayer.getName());
+    DisplayController.drawScore(
+      players[0].getName(),
+      players[0].getScore(),
+      players[1].getName(),
+      players[1].getScore()
+    );
   };
 
   const playRound = (spot) => {
@@ -133,11 +148,64 @@ function GameController(
   };
 }
 
+// For UI:
+// Need to take names of players. Could do that with a modal
+// Need show who's turn it is on the screen
+// Need to show the current score
+
+const DisplayController = (function () {
+  const visualBoard = document.querySelector(".game-board");
+  const playerOneScoreCard = document.querySelector(".player1-score");
+  const playerTwoScoreCard = document.querySelector(".player2-score");
+  const turnCard = document.querySelector(".turn-card");
+
+  const drawBoard = (boardArr) => {
+    // generate cells and populate them based on values in GameBoard.getBoard()
+    visualBoard.innerHTML = "";
+    // let currBoard = GameBoard.getBoard();
+
+    for (let i = 0; i < BOARD_SIZE; i++) {
+      let newCell = document.createElement("div");
+      newCell.classList.toggle("cell");
+      if (i == 1 || i == 4 || i == 7) newCell.classList.toggle("mid-col");
+      if (i == 3 || i == 4 || i == 5) newCell.classList.toggle("mid-row");
+
+      let cellVal = boardArr[i];
+      if (cellVal === "X") newCell.innerText = "X";
+      else if (cellVal === "O") newCell.innerText = "O";
+
+      visualBoard.appendChild(newCell);
+    }
+  };
+
+  const drawScore = (
+    playerOneName,
+    playerOneScore,
+    playerTwoName,
+    playerTwoScore
+  ) => {
+    // update score card
+    playerOneScoreCard.innerText = `${playerOneName}: ${playerOneScore}`;
+    playerTwoScoreCard.innerText = `${playerTwoName}: ${playerTwoScore}`;
+  };
+
+  const drawTurn = (activePlayerName) => {
+    turnCard.innerText = `${activePlayerName}'s turn`;
+  };
+  return {
+    drawBoard,
+    drawTurn,
+    drawScore,
+  };
+})();
+
 const game = GameController("Bob", "Joe");
 
-// Game with X as winner
+// DisplayController.drawBoard();
+
+// Game with player 1 as winner
 game.playRound(0);
-game.playRound(3);
+// game.playRound(3);
 game.playRound(3);
 game.playRound(4);
 game.playRound(6);
@@ -152,4 +220,11 @@ game.playRound(7);
 game.playRound(2);
 game.playRound(5);
 game.playRound(1);
+game.playRound(8);
+
+// Game with player 1 as winner
+game.playRound(0);
+game.playRound(3);
+game.playRound(4);
+game.playRound(6);
 game.playRound(8);
