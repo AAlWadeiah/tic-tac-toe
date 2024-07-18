@@ -1,4 +1,5 @@
 const BOARD_SIZE = 3 * 3;
+const ticTacToeBoard = document.querySelector(".game-board");
 
 // Gameboard module
 const GameBoard = (function () {
@@ -153,8 +154,8 @@ function GameController(
 // Need show who's turn it is on the screen
 // Need to show the current score
 
-const DisplayController = (function () {
-  const visualBoard = document.querySelector(".game-board");
+const DisplayController = (function (ticTacToeBoard) {
+  let visualBoard = ticTacToeBoard;
   const playerOneScoreCard = document.querySelector(".player1-score");
   const playerTwoScoreCard = document.querySelector(".player2-score");
   const turnCard = document.querySelector(".turn-card");
@@ -167,6 +168,7 @@ const DisplayController = (function () {
     for (let i = 0; i < BOARD_SIZE; i++) {
       let newCell = document.createElement("div");
       newCell.classList.toggle("cell");
+      newCell.dataset.index = i;
       if (i == 1 || i == 4 || i == 7) newCell.classList.toggle("mid-col");
       if (i == 3 || i == 4 || i == 5) newCell.classList.toggle("mid-row");
 
@@ -197,34 +199,38 @@ const DisplayController = (function () {
     drawTurn,
     drawScore,
   };
-})();
+})(ticTacToeBoard);
 
 const game = GameController("Bob", "Joe");
+
+ticTacToeBoard.addEventListener("click", (e) => {
+  game.playRound(e.target.dataset.index);
+});
 
 // DisplayController.drawBoard();
 
 // Game with player 1 as winner
-game.playRound(0);
+// game.playRound(0);
 // game.playRound(3);
-game.playRound(3);
-game.playRound(4);
-game.playRound(6);
-game.playRound(8);
+// game.playRound(3);
+// game.playRound(4);
+// game.playRound(6);
+// game.playRound(8);
 
 // Game with a tie
-game.playRound(0);
-game.playRound(3);
-game.playRound(4);
-game.playRound(6);
-game.playRound(7);
-game.playRound(2);
-game.playRound(5);
-game.playRound(1);
-game.playRound(8);
+// game.playRound(0);
+// game.playRound(3);
+// game.playRound(4);
+// game.playRound(6);
+// game.playRound(7);
+// game.playRound(2);
+// game.playRound(5);
+// game.playRound(1);
+// game.playRound(8);
 
 // Game with player 1 as winner
-game.playRound(0);
-game.playRound(3);
-game.playRound(4);
-game.playRound(6);
-game.playRound(8);
+// game.playRound(0);
+// game.playRound(3);
+// game.playRound(4);
+// game.playRound(6);
+// game.playRound(8);
