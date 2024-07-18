@@ -41,13 +41,27 @@
           <button
             type="submit"
             value="start-game"
-            class="form-control"
+            class="form-control cta-btn"
             id="start-game-btn"
           >
             Start Game
           </button>
         </form>
       </div>
+
+      <div class="modal" id="game-over-modal">
+        <div class="modal-header">
+          <div class="title">Player One Won!!</div>
+        </div>
+        <div class="modal-body">
+          <p class="score">They have a score of 4.</p>
+          <p>Continue playing?</p>
+          <button class="cta-btn" value="continue" data-continue-btn>
+            Let's go!
+          </button>
+        </div>
+      </div>
+      <div id="overlay"></div>
       <div id="game-widgets" hidden>
         <div class="game-tracker">
           <div class="score-card">
