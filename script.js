@@ -45,6 +45,18 @@ function createPlayer(name, mark) {
   return { getName, getMark, getScore, increaseScore };
 }
 
+function openModal(modal) {
+  if (modal == null) return;
+  modal.classList.add("active");
+  overlay.classList.add("active");
+}
+
+function closeModal(modal) {
+  if (modal == null) return;
+  modal.classList.remove("active");
+  overlay.classList.remove("active");
+}
+
 function GameController(
   playerOneName = "Player One",
   playerTwoName = "Player Two"
@@ -99,12 +111,31 @@ function GameController(
     return true;
   };
 
+  const gameOverMessages = (title, scoreMsg) => {
+    const modalTitle = document.querySelector(
+      "#game-over-modal > .modal-header > .title"
+    );
+    modalTitle.innerText = title;
+    const modalScoreMsg = document.querySelector(
+      "#game-over-modal > .modal-body > .score"
+    );
+    modalScoreMsg.innerText = scoreMsg;
+  };
+
   const gameOver = (player = null) => {
+    const gameOverModal = document.querySelector("#game-over-modal");
+
     if (player) {
       activePlayer.increaseScore();
+      gameOverMessages(
+        `${activePlayer.getName()} Won!!`,
+        `They have a score of ${activePlayer.getScore()}`
+      );
+      openModal(gameOverModal);
       console.log(
         `Winner is ${activePlayer.getName()} with a score of ${activePlayer.getScore()}!! `
       );
+
       DisplayController.drawScore(
         players[0].getName(),
         players[0].getScore(),
@@ -112,6 +143,8 @@ function GameController(
         players[1].getScore()
       );
     } else {
+      gameOverMessages("It's a tie ...", "None one scores :(");
+      openModal(gameOverModal);
       console.log("Its a tie :(");
     }
     board.clearBoard();
